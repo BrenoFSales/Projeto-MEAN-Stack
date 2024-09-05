@@ -2,11 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 var path = require('path');
 
-// Importar o arquivo que contem a funcao run()
-const { run } = require('./mongodb');
-
-// Executar a funcao run() para conectar ao MongoDB Atlas
-run().catch(console.dir);
+// Importa o Mongoose, após fazer a conexao com o MongoDB Atlas
+const { mongoose } = require('./mongodb');
 
 var appRoutes = require('./routes/app');
 
@@ -35,5 +32,7 @@ app.use('/', appRoutes);
 app.use(function (req, res, next) {
   return res.render('index');
 });
+
+
 
 module.exports = app;

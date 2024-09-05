@@ -1,0 +1,13 @@
+.card-custom {
+  width: 50%;
+  margin: auto;
+}
+
+.footer-custom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-custom {
+  height: 70px;
+}
