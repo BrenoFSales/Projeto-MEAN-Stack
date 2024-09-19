@@ -1,21 +1,19 @@
-<body>
-  <input type="text" [(ngModel)]="messageVarClasse().content">
-  <input type="text" [(ngModel)]="messageVarClasse().username">
-  <div class="card card-custom mt-5">
-    <div class="card-header">
-      <h3>Titulo da Mensagem</h3>
-      <p>Projeto de envio de mensagens</p>
-    </div>
-    <div class="card-body">
-      <!--<input type="text" class="form-control input-custom" placeholder="Sua mensagem fica aqui!"/> -->
-      <div class="form-control input-custom">{{ messageVarClasse().content }}</div>
-    </div>
-    <div class="card-footer footer-custom">
-      <p>{{ messageVarClasse().username }}</p>
-      <div>
-        <a class="btn btn-primary">Edit</a>
-        <a class="btn btn-danger ms-2">Delete</a>
-      </div>
+<br/>
+<!-- <input type="text" [(ngModel)]="messageVarClasse().content"> -->
+<!-- <input type="text" [(ngModel)]="messageVarClasse().username"> -->
+<div class="card card-custom mt-5">
+  <div class="card-header">
+    <!-- <h3>{{ messageVarClasse().messageId}}</h3> -->
+  </div>
+  <div class="card-body">
+    <!--<input type="text" class="form-control input-custom" placeholder="Sua mensagem fica aqui!"/> -->
+    <div class="form-control input-custom">{{ messageVarClasse().content }}</div>
+  </div>
+  <div class="card-footer footer-custom">
+    <p>Author: <i>{{ messageVarClasse().username }}</i></p>
+    <div>
+      <a class="btn btn-primary" (click)="onEdit()">Edit</a>
+      <a class="btn btn-danger ms-2">Delete</a>
     </div>
   </div>
-</body>
+</div>

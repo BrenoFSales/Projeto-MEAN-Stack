@@ -1,13 +1,5 @@
-.card-custom {
-  width: 50%;
+body{
+  width: 800px;
+  text-align: center;
   margin: auto;
-}
-
-.footer-custom {
-  display: flex;
-  justify-content: space-between;
-}
-
-.input-custom {
-  height: 70px;
 }

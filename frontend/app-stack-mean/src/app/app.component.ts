@@ -1,24 +1,22 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MessageComponent } from '../messages/messages.component';
+import { MessagesListComponent } from '../messages/messages-list.component';
+import { MessagesInputComponent } from '../messages/messages-input.component';
+import { CommonModule } from '@angular/common'
 import { Message } from '../messages/messages.model';
  
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet
-            MessageComponent
+  imports: [RouterOutlet,
+            MessagesListComponent,
+            MessagesInputComponent,
+            CommonModule
             ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  messageBinding: Message = new Message("Texto da Mensagem via Input","Breno Sales")
-  // title = 'app-stack-mean';
-  // message = {
-  //  content: "To ficando fera com components!",
-  //  author: "Brenin Show"
-  //}
   
 }
