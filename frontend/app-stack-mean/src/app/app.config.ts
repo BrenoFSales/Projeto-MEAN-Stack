@@ -3,6 +3,13 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 
+import { MessageService } from '../messages/messages.services';
+
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  //providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  
+  providers: [
+    provideRouter(routes),
+    { provide: MessageService }
+  ]
 };

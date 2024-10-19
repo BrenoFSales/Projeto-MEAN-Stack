@@ -1,0 +1,35 @@
+<h1>SIGN UP</h1>
+<div class="col-12 col-offset-2">
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="firstName">Nome:</label>
+      <input type="text" id="firstName" class="form-control" formControlName="firstNameTS">
+    </div>
+    @if (myForm.get('firstNameTS')?.errors?.['required'] &&
+         myForm.get('firstNameTS')?.touched) {
+          <div><p style="color: red;">Nome Obrigatório!</p></div>
+    }
+    <div>
+      <label for="firstName">Sobrenome:</label>
+      <input type="text" id="lastName" class="form-control" formControlName="lastNameTS">
+    </div>
+    <div>
+      <label for="firstName">E-mail:</label>
+      <input type="email" id="email" class="form-control" formControlName="emailTS">
+    </div>
+    @if (myForm.get('emailTS')?.errors?.['required'] &&
+         myForm.get('emailTS')?.touched) {
+          <div><p style="color: red;">E-mail obrigatório!</p></div>
+    }
+    @if (myForm.get('emailTS')?.errors?.['pattern'] &&
+         myForm.get('emailTS')?.touched) {
+          <div><p style="color: red;">E-mail inválido!</p></div>
+    }
+    <div>
+      <label for="firstName">Senha:</label>
+      <input type="password" id="password" class="form-control" formControlName="passwordTS">
+    </div>
+    <br/>
+    <button class="btn btn-primary" type="submit" [disabled]="!myForm.valid">Cadastrar</button>
+  </form>
+</div>
