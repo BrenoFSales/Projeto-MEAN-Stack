@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+var cookieParser = require('cookie-parser')
 var path = require('path');
 
 const messagesRoutes = require('./routes/messages');
@@ -16,6 +17,8 @@ app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
