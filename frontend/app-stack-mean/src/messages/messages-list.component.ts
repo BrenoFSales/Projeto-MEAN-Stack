@@ -57,6 +57,7 @@ export class MessagesListComponent implements OnInit {
           console.log({id: dadosSucesso.objSMessageSRecuperadoS[0].messageId});
 
           this.messageS = dadosSucesso.objSMessageSRecuperadoS;
+          console.log('mensagens carregadas!');
         },
         error: (dadosErro: any) => {
           console.log(`$== !!Error (subscribe): - ${dadosErro.info_extra} ==`);

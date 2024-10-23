@@ -13,9 +13,7 @@
     <div>
       <a class="btn btn-primary" (click)="editarMensagem()">{{ editMode ? 'Salvar' : 'Editar' }}</a>
       <a class="btn btn-danger ms-2" (click)="excluirMensagem()">Excluir</a>
-      <button *ngIf="editMode" class="btn btn-danger ms-2" (click)="cancelarEdicao()">
-        Cancelar
-      </button>
+      <button *ngIf="editMode" class="btn btn-danger ms-2" (click)="cancelarEdicao()">Cancelar</button>
     </div>
   </div>
 </div>

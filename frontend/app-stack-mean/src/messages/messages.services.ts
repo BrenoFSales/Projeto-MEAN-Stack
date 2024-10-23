@@ -21,6 +21,11 @@ export class MessageService {
 
   private http = inject(HttpClient);
 
+  // idealmente gostaria de salvar isso nos cookies, porém o browser parece não aceitar Set-Cookies
+  getJWT(): string | null {
+    return window.localStorage.getItem('jwt');
+  }
+
   // Funcao para adicionar mensagem na lista
   async addMessage(message: Message) {
 
@@ -28,11 +33,11 @@ export class MessageService {
     //   catchError((e) => this.errorHandler(e, "addMessage()"))
     // );
 
-    let jwt = window.localStorage.getItem("jwt");
+    // let jwt = window.localStorage.getItem("jwt");
     try {
       let response = await fetch('http://localhost:3000/message', {
         method: 'POST',
-        body: JSON.stringify({jwt: jwt, message: message}),
+        body: JSON.stringify({jwt: this.getJWT(), message: message}),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
         }
@@ -42,6 +47,7 @@ export class MessageService {
       }
       let json = await response.json();
       message.username = json.user.username;
+      message.messageId = json.objMessageSave._id;
 
     } catch (err) {
       console.log(err)
@@ -57,8 +63,20 @@ export class MessageService {
   }
 
   // Funcao para remover mensagem da lista
-  deleteMessage(message: Message) {
-    this.messageService.splice(this.messageService.indexOf(message), 1); // Remove da lista
+  async deleteMessage(message: Message) {
+    let index = this.messageService.indexOf(message);
+    if (index < 0) {
+      throw 'falha ao encontrar indice de mensagem à ser excluída';
+    }
+    let m = this.messageService[index];
+
+    await fetch(`${this.baseUrl}/message/delete`, {
+      method: 'POST',
+      body: JSON.stringify({ jwt: this.getJWT(), id: m.messageId }),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        }
+    })
     // Precisa remover a mensagem no backend
   }
 
@@ -73,7 +91,7 @@ export class MessageService {
     //   // 'Authorization': `Bearer ${window.localStorage.getItem('jwt')}`
     // });
 
-    return this.http.post<any>(`${this.baseUrl}/message/get`, { jwt: window.localStorage.getItem('jwt') }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/message/get`, {jwt: this.getJWT()}).pipe(
       map((responseRecebida : any) => {
         console.log(responseRecebida);
         console.log({content: responseRecebida.objSMessageSRecuperadoS[0].content});
@@ -83,6 +101,7 @@ export class MessageService {
 
         let transfomedCastMessagesModelFrontend: Message[] = [];
         for(let msg of messageSResponseRecebida){
+          console.log('tranformed msg: ', msg._id);
           transfomedCastMessagesModelFrontend.push(
             new Message(msg.content, msg.user.username, msg._id)
           );

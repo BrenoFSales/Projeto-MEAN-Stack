@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // Middleware for JWT validation
 const verifyToken = (req, res, next) => {
   const token = req.body.jwt ?? req.headers['authorization'];
-  console.log('token:', token, req.body, req.headers['authorization']);
+  console.log('token:', token, req.body);
   if (!token) {
     console.log('unauthorized: no token.')
     res.status(401).json({ error: 'Unauthorized' });

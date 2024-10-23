@@ -20,9 +20,8 @@ export class MessagesComponent {
 
   ngOnInit() {
     this.mensagemEditada = this.messageVarClasse().content; // Copia a mensagem que será editada para o textarea
+    console.log('mensagem inicializada!', this.messageVarClasse().messageId);
   }
-
-
   constructor(private messageServiceObj: MessageService) { }
 
   // Função para editar a mensagem
