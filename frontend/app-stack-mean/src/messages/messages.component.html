@@ -1,19 +1,21 @@
 <br/>
-<!-- <input type="text" [(ngModel)]="messageVarClasse().content"> -->
-<!-- <input type="text" [(ngModel)]="messageVarClasse().username"> -->
 <div class="card card-custom mt-5">
   <div class="card-header">
-    <!-- <h3>{{ messageVarClasse().messageId}}</h3> -->
+    <!-- Colocar o ID da mensagem no header da mensagem dela -->
   </div>
   <div class="card-body">
-    <!--<input type="text" class="form-control input-custom" placeholder="Sua mensagem fica aqui!"/> -->
-    <div class="form-control input-custom">{{ messageVarClasse().content }}</div>
+    <!-- Se a mensagem não está no modo de edição carrega a estrutura padrão da mensagem-->
+    <div class="form-control input-custom" *ngIf="!editMode">{{ messageVarClasse().content }}</div> <!-- Se a mensagem estiver no mode de edição troca o div por um input ja com a mensagem que queria editar -->
+    <textarea class="form-control input-custom" *ngIf="editMode" [(ngModel)]="mensagemEditada"></textarea>
   </div>
   <div class="card-footer footer-custom">
     <p>Author: <i>{{ messageVarClasse().username }}</i></p>
     <div>
-      <a class="btn btn-primary" (click)="onEdit()">Edit</a>
-      <a class="btn btn-danger ms-2" (click)="onDelete()">Delete</a>
+      <a class="btn btn-primary" (click)="editarMensagem()">{{ editMode ? 'Salvar' : 'Editar' }}</a>
+      <a class="btn btn-danger ms-2" (click)="excluirMensagem()">Excluir</a>
+      <button *ngIf="editMode" class="btn btn-danger ms-2" (click)="cancelarEdicao()">
+        Cancelar
+      </button>
     </div>
   </div>
 </div>

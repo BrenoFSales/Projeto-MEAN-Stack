@@ -17,6 +17,17 @@ import { Message } from './messages.model';
   template: `
     <div class="col-md-8 col-md-offset-2">
       @for (msg of messageS; track $index) {
+        <app-messages>
+        </app-messages> 
+      } @empty {
+        messageS é uma lista vazia
+      }
+    </div>
+  `,
+  // OLD TEMPLATE: 
+  /* 
+    <div class="col-md-8 col-md-offset-2">
+      @for (msg of messageS; track $index) {
         <app-messages [messageVarClasse]="msg"
                       (outputMessage)="msg.content = $event">
         </app-messages> 
@@ -24,7 +35,7 @@ import { Message } from './messages.model';
         messageS é uma lista vazia
       }
     </div>
-  `,
+  */
   // providers: [MessageService]
 })
 
@@ -35,8 +46,9 @@ export class MessagesListComponent implements OnInit {
   
   ngOnInit(): void {
     // messageS aponta para o array messageService que armazena os dados
-    // this.messageS = this.messageService.getMessage();
+    // this.messageS = this.messageService.getMessage(); // lista no frontend(próprio service)
     
+    // metodo para fazer o get no backent
     this.messageService.getMessage()
       .subscribe({
         next: (dadosSucesso: any) => {
@@ -46,7 +58,7 @@ export class MessagesListComponent implements OnInit {
           
           this.messageS = dadosSucesso.objSMessageSRecuperadoS;
         },
-        error: (dadosErro) => {
+        error: (dadosErro: any) => {
           console.log(`$== !!Error (subscribe): - ${dadosErro.info_extra} ==`);
           console.log(dadosErro);
         }

@@ -28,7 +28,7 @@ export class MessagesInputComponent {
           console.log({content: dadosSucesso.objMessageSave.content});
           console.log({_id: dadosSucesso.objMessageSave._id});
         },
-        error: (dadosErro) => {
+        error: (dadosErro: any) => {
           console.log(`$== !!Error (subscribe): - ${dadosErro.info_extra} ==`);
           console.log(dadosErro);
         }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-// const uri = "mongodb+srv://SalesMEAN:bzo1Btsc8tnpFMUx@mean.z952y.mongodb.net/?retryWrites=true&w=majority&appName=MEAN";
-const uri = "mongodb://balta:e296cd9f@localhost:27017/admin";
+const uri = "mongodb+srv://SalesMEAN:bzo1Btsc8tnpFMUx@mean.z952y.mongodb.net/?retryWrites=true&w=majority&appName=MEAN";
+// const uri = "mongodb://balta:e296cd9f@localhost:27017/admin";
 
 // Conectando ao MongoDB Atlas com Mongoose
 mongoose.connect(uri, {

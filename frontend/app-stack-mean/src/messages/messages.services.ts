@@ -22,7 +22,7 @@ export class MessageService {
   private http = inject(HttpClient);
 
   // Funcao para adicionar mensagem na lista
-  async addMessage(message: Message) {
+  addMessage(message: Message) {
     this.messageService.push(message);
     console.log(this.messageService);
 
@@ -42,10 +42,16 @@ export class MessageService {
     //   console.log(err)
     // }
   }
+  
+  // Função par atualizar a mensagem no backend
+  atualizarMensagem(message: Message): Observable<any> {
+    return this.http.put(`${this.baseUrl}/message`, message)
+  }
 
   // Funcao para remover mensagem da lista
   deleteMessage(message: Message) {
-    this.messageService.splice(this.messageService.indexOf(message), 1);
+    this.messageService.splice(this.messageService.indexOf(message), 1); // Remove da lista
+    // Precisa remover a mensagem no backend
   }
 
   // Funcao para buscar uma mensagem
@@ -57,9 +63,9 @@ export class MessageService {
         console.log(responseRecebida);
         console.log({content: responseRecebida.objSMessageSRecuperadoS[0].content});
         console.log({_id: responseRecebida.objSMessageSRecuperadoS[0]._id});
-
+  
         const messageSResponseRecebida = responseRecebida.objSMessageSRecuperadoS;
-
+  
         let transfomedCastMessagesModelFrontend: Message[] = [];
         for(let msg of messageSResponseRecebida){
           transfomedCastMessagesModelFrontend.push(
@@ -68,11 +74,11 @@ export class MessageService {
         }
         this.messageService = [...transfomedCastMessagesModelFrontend];
         responseRecebida.objSMessageSRecuperadoS = this.messageService;
-
+  
         console.log({myMsgSucesso: responseRecebida.myMsgSucesso});
         console.log({content: responseRecebida.objSMessageSRecuperadoS[0].content});
         console.log({id: responseRecebida.objSMessageSRecuperadoS[0].messageId});
-
+  
         return responseRecebida;
       }),
       catchError((e) => this.errorHandler(e, "getMessage()"))
