@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map} from 'rxjs';
 
 import { Message } from "./messages.model";
@@ -22,27 +22,35 @@ export class MessageService {
   private http = inject(HttpClient);
 
   // Funcao para adicionar mensagem na lista
-  addMessage(message: Message) {
+  async addMessage(message: Message) {
+
+    // return this.http.post<any>(`${this.baseUrl}/message`, message).pipe(
+    //   catchError((e) => this.errorHandler(e, "addMessage()"))
+    // );
+
+    let jwt = window.localStorage.getItem("jwt");
+    try {
+      let response = await fetch('http://localhost:3000/message', {
+        method: 'POST',
+        body: JSON.stringify({jwt: jwt, message: message}),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        }
+      });
+      if (!response.ok) {
+        throw response;
+      }
+      let json = await response.json();
+      message.username = json.user.username;
+
+    } catch (err) {
+      console.log(err)
+    }
+
     this.messageService.push(message);
     console.log(this.messageService);
-
-    return this.http.post<any>(`${this.baseUrl}/message`, message).pipe(
-      catchError((e) => this.errorHandler(e, "addMessage()"))
-    );
-    // try {
-    //   let messageString = JSON.stringify({message: message});
-    //   await fetch('http://localhost:3000/save-message', {
-    //     method: 'POST',
-    //     body: messageString,
-    //     headers: {
-    //       'Content-Type': 'application/json; charset=utf-8',
-    //     }
-    //   })
-    // } catch (err) {
-    //   console.log(err)
-    // }
   }
-  
+
   // Função par atualizar a mensagem no backend
   atualizarMensagem(message: Message): Observable<any> {
     return this.http.put(`${this.baseUrl}/message`, message)
@@ -56,29 +64,36 @@ export class MessageService {
 
   // Funcao para buscar uma mensagem
   getMessage() {
-    // return this.messageService;
 
-    return this.http.get<any>(`${this.baseUrl}/message`).pipe(
+    // fetch(`${this.baseUrl}/message`, { headers: {
+    //   // 'Authorization': `Bearer ${window.localStorage.getItem('jwt')}`
+    // }}).then(x => console.log(x));
+    //
+    // const headers = new HttpHeaders({
+    //   // 'Authorization': `Bearer ${window.localStorage.getItem('jwt')}`
+    // });
+
+    return this.http.post<any>(`${this.baseUrl}/message/get`, { jwt: window.localStorage.getItem('jwt') }).pipe(
       map((responseRecebida : any) => {
         console.log(responseRecebida);
         console.log({content: responseRecebida.objSMessageSRecuperadoS[0].content});
         console.log({_id: responseRecebida.objSMessageSRecuperadoS[0]._id});
-  
+
         const messageSResponseRecebida = responseRecebida.objSMessageSRecuperadoS;
-  
+
         let transfomedCastMessagesModelFrontend: Message[] = [];
         for(let msg of messageSResponseRecebida){
           transfomedCastMessagesModelFrontend.push(
-            new Message(msg.content, 'Vinicius', msg._id)
+            new Message(msg.content, msg.user.username, msg._id)
           );
         }
         this.messageService = [...transfomedCastMessagesModelFrontend];
         responseRecebida.objSMessageSRecuperadoS = this.messageService;
-  
+
         console.log({myMsgSucesso: responseRecebida.myMsgSucesso});
         console.log({content: responseRecebida.objSMessageSRecuperadoS[0].content});
         console.log({id: responseRecebida.objSMessageSRecuperadoS[0].messageId});
-  
+
         return responseRecebida;
       }),
       catchError((e) => this.errorHandler(e, "getMessage()"))

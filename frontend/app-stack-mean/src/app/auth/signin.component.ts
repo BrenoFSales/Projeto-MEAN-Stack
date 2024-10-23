@@ -44,6 +44,9 @@ export class SigninComponent implements OnInit {
           'Content-Type': 'application/x-www-form-urlencoded',
         }
       });
+      if (!response.ok) {
+        throw response.ok;
+      }
       let jsonresponse = await response.json();
       console.log(jsonresponse)
       // esse não é o ideal

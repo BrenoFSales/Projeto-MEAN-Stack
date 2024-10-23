@@ -1,6 +1,8 @@
+
 var express = require('express'); 
 var router = express.Router();
 var bodyParser = require('body-parser')
+var verifyToken = require('./verifier')
 const jwt = require('jsonwebtoken');
 
 router.use(express.json());
@@ -21,24 +23,6 @@ router.post('/save-message', async (req, res, next) => {
 });
 
 
-// Middleware for JWT validation
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) {
-    res.status(401).json({ error: 'Unauthorized' });
-    return;
-  }
-
-  jwt.verify(token, 'secret', (err, decoded) => {
-    if (err) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
-    }
-    req.user = decoded;
-    next();
-  });
-};
-
 router.post("/signup", bodyParser.urlencoded({extended: true}), async (req, res, next) => {
   let { firstNameTS, lastNameTS, emailTS, passwordTS } = req.body;
 
@@ -50,26 +34,31 @@ router.post("/signup", bodyParser.urlencoded({extended: true}), async (req, res,
   await newUser.save();
 
   console.log('usuário cadastrado! ', newUser.username);
-  res.send(200);
+  res.sendStatus(200);
 });
 
 router.post("/signin", bodyParser.urlencoded({extended: true}), async (req, res, next) => {
-  let { emailTS = 'default', passwordTS = 'default' } = req.body;
+  let { emailTS, passwordTS } = req.body;
   
+  console.log( emailTS, passwordTS);
   try {
-
     let query = await User.findOne({email: emailTS, password: passwordTS}).exec();
-    if (query === null) {
+    console.log(query);
+    if (query === null || query === undefined) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
 
-    const token = jwt.sign({email: query.email}, 'secret');
+    const token = jwt.sign({id: query.id, username: query.username}, 'secret');
+    if (token === undefined || token === null) {
+      throw 'token?';
+    }
 
     res.cookie('JWT', token).send({jwt: token});
     return;
 
   } catch (err) {
+    console.error(err);
     res.sendStatus(500);
     return;
   };
@@ -110,5 +99,3 @@ router.post('/node-mongodb-mongoose-user', async (req, res, next) => {
 
 
 module.exports = router; 
-
-
