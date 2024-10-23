@@ -14,17 +14,17 @@ import { MessageService } from './messages.services';
 export class MessagesComponent {
   // @Input() messageVarClasse : Message = new Message("","");
   messageVarClasse = input<Message>(new Message("",""));
-  
+
   editMode: boolean = false; // Estado que define se a mensagem está em modo edição ou não
   mensagemEditada: string = ''; // Texto da mensagem que será editado
-  
+
   ngOnInit() {
     this.mensagemEditada = this.messageVarClasse().content; // Copia a mensagem que será editada para o textarea
   }
-  
-  
+
+
   constructor(private messageServiceObj: MessageService) { }
-  
+
   // Função para editar a mensagem
   editarMensagem(){
     // this.outputMessage.emit("Texto retornado componente mensagens!");
@@ -39,13 +39,13 @@ export class MessagesComponent {
       this.editMode = true;
     }
   }
-  
+
   // Função para cancelar a edição da mensagem
   cancelarEdicao(){
     this.editMode = false; // sai do modo edição da mensagem
     this.mensagemEditada = this.messageVarClasse().content; // reseta a variável mensagemEditada
   }
-  
+
   excluirMensagem(){
     this.messageServiceObj.deleteMessage(this.messageVarClasse());
   }
